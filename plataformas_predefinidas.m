@@ -29,11 +29,25 @@ rigs = [
     1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-]';
+]' == 1;
+
+rigsCost = [10 19 27 34 40 45 49 52 54 90];
 
 a = 1;
 d = 0.5;
 
-obj = @(r) objective(r, wells, a, d);
+p.cadIntAcep = 40;
+p.cadInt = 80;
+p.maxCad = 3;
+p.frecImp = 40;
+p.x0 = randi(2,1,18) - 1 == 1;
+p.FcnObj = @(s) objective(s, rigs, wells, a, d, rigsCost);
+p.FcnVec = @neighbor;
+p.Imp = @imprimir;
+p.variarC = 0;
+p.alfa = 0.8;
+p.beta = 1.05;
+p.minRazAcep = 0.95;
+p.min = 1;
 
-obj(rigs(:,18))
+recocido(p);

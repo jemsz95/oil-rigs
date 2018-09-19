@@ -1,10 +1,23 @@
-function cost = objective(rigs, wells, a, d)
+function cost = objective(set, rigs, wells, a, d, rigsCost)
     cost = 0;
-    for r = rigs
-        poly = wells(r == 1,:);
+    used = zeros(size(wells, 1), 1);
+    
+    for r = rigs(:,set)
+        used = used | r;
+        poly = wells(r,:);
         centroid = sum(poly, 1) / size(poly,1);
+        nWells = sum(r);
+        
+        if nWells > 9
+            nWells = 10;
+        end
+        
         h = sum(sqrt(sum((poly - centroid).^2,2)));
-        cost = cost + a * (d+h)^2; 
+        cost = cost + rigsCost(nWells) + a * (d+h)^2; 
+    end
+        
+    if(any(~used))
+        cost = Inf;
     end
 end
 
