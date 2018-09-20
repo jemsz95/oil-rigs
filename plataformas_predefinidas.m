@@ -40,14 +40,41 @@ p.cadIntAcep = 40;
 p.cadInt = 80;
 p.maxCad = 3;
 p.frecImp = 40;
-p.x0 = randi(2,1,18) - 1 == 1;
+p.x0 = (randi(2,1,18) - 1 == 1)';
 p.FcnObj = @(s) objective(s, rigs, wells, a, d, rigsCost);
 p.FcnVec = @neighbor;
 p.Imp = @imprimir;
 p.variarC = 0;
-p.alfa = 0.8;
+p.alfa = 0.85;
 p.beta = 1.05;
 p.minRazAcep = 0.95;
 p.min = 1;
 
-recocido(p);
+[x,prom,desv] = plotRecocido(p,40, 2000);
+
+% res = zeros(40, 2, 70);
+% 
+% for i = 1:40
+%     corrida = recocido(p, 2000);
+%     n = size(corrida.intentos,1);
+%     res(i,1,:) = padarray(corrida.intentos, 70 - n, 'replicate', 'post');
+%     res(i,2,:) = padarray(corrida.f, 70 - n, 'replicate', 'post');
+% end
+% 
+% 
+% stddev = std(res(:,2,:),1);
+% 
+% y1 = mean(res(:,2,:), 1);
+% y2 = y1 + stddev;
+% y3 = y1 - stddev;
+
+%x = res(:,1,:);
+
+plot(prom);
+hold on
+plot(prom + desv);
+plot(prom - desv);
+hold off
+%hold on
+%plot(x(1,:),y3(:));
+%hold off
