@@ -7,13 +7,8 @@ function cost = objective(set, rigs, wells, a, d, rigsCost)
         poly = wells(r,:);
         centroid = sum(poly, 1) / size(poly,1);
         nWells = sum(r);
-        
-        if nWells > 9
-            nWells = 10;
-        end
-        
-        h = sum(sqrt(sum((poly - centroid).^2,2)));
-        cost = cost + rigsCost(nWells) + a * (d+h)^2; 
+        h = sqrt(sum((poly - centroid).^2,2));
+        cost = cost + rigsCost(bound(nWells,1,10)) + sum(a * (h + d).^2); 
     end
         
     if(any(~used))
